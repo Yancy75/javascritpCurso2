@@ -25,38 +25,47 @@ const initStore = () => {
 const loadStore = () =>{
    throw new('Not implemented'); 
 }
+const grabarLocalStorace = () => {
+   /// localStorage.setItem('estado', 'hola mundo');/* primer valor es la clave puede ser cualquier cosa es solo un identificador*/
+       localStorage.setItem('estado', JSON.stringify(state));
+}
 /**
  * @param{string} descripcion
  */
 const addTodo = (descripcion) => {
     if (!descripcion) { throw new Error('se necesita lla descripcion'); }
     state.todos.push(new Todo(descripcion));    
+    grabarLocalStorace();
 }
 const toggleTodo = (todoId) => {
     /* el comando map en el arreglo tiene la misma funcionque el for recorrera todo el arreglo 
     depositando su valos en este caso en la variable todo(no confundir con la variable interna de constante) cambia esa unica variable */
-    console.log(todoId);
+    // console.log(todoId);
     state.todos = state.todos.map(todo => {
         if (todo.id === todoId) {
             todo.done = !todo.done;
-        }
-        return todo;
+             }
+         return todo;/* este retunr es del map si no se coloca debuelve indefinido */
     });
+    grabarLocalStorace();
 }
 const deleteTodo = (todoId) => {
     /*filter es una propiedad de los array en javascritp  en este caso devuelve un arreglo completo pero sin el valos que le mandamos*/
     state.todos = state.todos.filter(todo => todo.id !== todoId);
+    grabarLocalStorace();
 }
 const deleteCompleted = () => {
     /* todo es la variable interna donde buscamos los elementos uno a uno y le decimos que sea igual a false tambien puedes hacer comparativas
     pero al no poner nada contra que comparar el solo devuelve nada */
     state.todos = state.todos.filter(todo => todo.done);
+    grabarLocalStorace();
 }
 const setFilter = (newFilter = Filters.All) => {
     /*validar los filtros */
     let busqueda = Object.values(Filters);
     if (busqueda.find((elemento) => elemento === newFilter)) {state.filter = newFilter;
-    } else {throw new Error(`El filtro debe existir ${newFilter}`);}
+    } else { throw new Error(`El filtro debe existir ${newFilter}`); }
+    grabarLocalStorace();
 }
 const getCurrentFilter = () => {
     return state.filter; 
