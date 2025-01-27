@@ -23,7 +23,7 @@ const initStore = () => {
     /*console.log('inicion de la puta mierda');*/
 }
 const loadStore = () =>{
-   throw new('Not implemented'); 
+    console.log(loadStore.getItem('estado'));
 }
 const grabarLocalStorace = () => {
    /// localStorage.setItem('estado', 'hola mundo');/* primer valor es la clave puede ser cualquier cosa es solo un identificador*/
