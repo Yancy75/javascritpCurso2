@@ -1,6 +1,6 @@
 import { Todo } from "../todos/models/todo.model";
 
-const Filters = {
+export const Filters = {
     All: 'all',
     completed: 'Completed',
     Pending:'Pending'
@@ -8,22 +8,32 @@ const Filters = {
 
 const state = {
     todos: [
-        new Todo('piedra del alma'),
+        /*new Todo('piedra del alma'),
         new Todo('piedra del infinito'),
         new Todo('piedra del tiempo'),
         new Todo('piedra del poder'),
-        new Todo('piedra del realidad'),
+        new Todo('piedra del realidad'),*/
     ],
     filter: Filters.All,
 }
 
 const initStore = () => {
     /* confirma la que la constante filters y state esten cargadas */
-    console.log(state);
-    /*console.log('inicion de la puta mierda');*/
+    if (!loadStore()){ 
+        for(let i=0;i<5;i++){state.todos.push(new Todo(`Piedra del Vacio: ${i}`));}/* si no existe la variable local la rellena */
+        state.filter = Filters.All;}
+    //console.log(loadStore());   
 }
 const loadStore = () =>{
-    console.log(loadStore.getItem('estado'));
+    if (localStorage.getItem('estado')) { 
+       /* para asignarlo haremos una descomposicion state es una variable pero sus componenetes internos no lo son */ 
+        const { todos = [], filter = Filters.All } = JSON.parse(localStorage.getItem('estado'));
+        state.todos = todos;
+        state.filter = filter;  
+        return true;  /* si logro hacer la operacion */
+    } 
+    return false; /* no logro hacer la operacion */
+    
 }
 const grabarLocalStorace = () => {
    /// localStorage.setItem('estado', 'hola mundo');/* primer valor es la clave puede ser cualquier cosa es solo un identificador*/
@@ -33,7 +43,7 @@ const grabarLocalStorace = () => {
  * @param{string} descripcion
  */
 const addTodo = (descripcion) => {
-    if (!descripcion) { throw new Error('se necesita lla descripcion'); }
+    if (!descripcion) { throw new Error('se necesita la descripcion'); }
     state.todos.push(new Todo(descripcion));    
     grabarLocalStorace();
 }
@@ -57,14 +67,14 @@ const deleteTodo = (todoId) => {
 const deleteCompleted = () => {
     /* todo es la variable interna donde buscamos los elementos uno a uno y le decimos que sea igual a false tambien puedes hacer comparativas
     pero al no poner nada contra que comparar el solo devuelve nada */
-    state.todos = state.todos.filter(todo => todo.done);
+    state.todos = state.todos.filter(todo => !todo.done);
     grabarLocalStorace();
 }
 const setFilter = (newFilter = Filters.All) => {
     /*validar los filtros */
     let busqueda = Object.values(Filters);
-    if (busqueda.find((elemento) => elemento === newFilter)) {state.filter = newFilter;
-    } else { throw new Error(`El filtro debe existir ${newFilter}`); }
+      if (busqueda.find((elemento) => elemento === newFilter)) {state.filter = newFilter;
+      } else { throw new Error(`El filtro debe existir ${newFilter}`); }
     grabarLocalStorace();
 }
 const getCurrentFilter = () => {
@@ -100,5 +110,7 @@ export default {
     deleteCompleted,
     setFilter,
     getCurrentFilter,
-    getTodo
+    getTodo,
+    Filters,
+    state,
 }

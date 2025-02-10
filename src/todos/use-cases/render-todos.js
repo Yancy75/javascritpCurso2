@@ -1,6 +1,7 @@
 import { Todo } from "../models/todo.model";
 import { creaTodohtml } from './'
 
+
 let Ele;
 /**
  * 
@@ -19,5 +20,5 @@ export const construtoPantalla = (elementoId, todos = []) => {
      
     todos.forEach(tod => {
          Ele.append(creaTodohtml(tod));
-    });
+    });    
 }
